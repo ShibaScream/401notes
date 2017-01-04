@@ -1,3 +1,5 @@
+'use strict'
+
 const Node = require('./node.js')
 
 const SinglyLinkedList = module.exports = function(arr) {
@@ -12,12 +14,12 @@ SinglyLinkedList.prototype.prepend = function(val) {
 
   if(!this.head) {
     this.head = node
-    return node.val
+    return node.value
   }
 
   node.next = this.head
   this.head = node
-  return node.val
+  return node.value
 }
 
 SinglyLinkedList.prototype.append = function(val) {
@@ -26,7 +28,7 @@ SinglyLinkedList.prototype.append = function(val) {
 
   if(!this.head) {
     this.head = node
-    return node.val
+    return node.value
   }
 
   _setLastNode(this.head)
@@ -40,7 +42,7 @@ SinglyLinkedList.prototype.append = function(val) {
     _setLastNode(currentNode)
   }
   currentNode.next = node
-  return node.val
+  return node.value
 }
 
 SinglyLinkedList.prototype.removeHead = function() {
