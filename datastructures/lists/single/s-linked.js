@@ -68,3 +68,20 @@ SinglyLinkedList.prototype.removeTail = function() {
   secondLastNode.next = null
   return val
 }
+
+// white board problem - solution 1
+SinglyLinkedList.prototype.reverse1 = function() {
+  let newList = new SinglyLinkedList()
+  let currentHead = this.head
+  while (currentHead) {
+    newList.prepend(currentHead.val)
+    currentHead = currentHead.next
+  }
+  return newList
+}
+
+// solution 2
+SinglyLinkedList.prototype.reverse2 = function() {
+  let prevHead = this.Head
+  
+}

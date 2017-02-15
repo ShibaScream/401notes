@@ -1,0 +1,20 @@
+{
+  "name": "angularIntro",
+  "version": "1.0.0",
+  "description": "This is a yarn, angular, and web pack",
+  "main": "index.js",
+  "repository": {},
+  "author": "Dan",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack"
+  },
+  "dependencies": {
+    "css-loader": "^0.26.1",
+    "html-webpack-plugin": "^2.28.0",
+    "node-sass": "^4.5.0",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.1",
+    "webpack": "^2.2.1"
+  }
+}
