@@ -1,8 +1,9 @@
 'use strict'
 
-module.exports = (parent, right, left, value) => {
-  this.parent = parent
-  this.right = right
-  this.left = left
-  this.value = value
+function Node (value, left, right) {
+  this.right = right || undefined
+  this.left = left || undefined
+  this.value = value || undefined
 }
+
+module.exports = Node
