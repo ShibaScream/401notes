@@ -9,8 +9,15 @@ function Tree (array) {
   }
 }
 
-Tree.prototype.search = function (nodeValue) {
-  console.log(nodeValue)
+// search function for a full and balanced tree = log(n)
+Tree.prototype.search = function (node, value) {
+  if (!node) return false
+  if (node.value === value) return true
+  if (node.value > value) {
+    this.search(node.left, value)
+  } else {
+    this.search(node.right, value)
+  }
 }
 
 Tree.prototype.insertNode = function (value, node) {
