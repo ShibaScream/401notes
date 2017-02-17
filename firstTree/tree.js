@@ -60,4 +60,13 @@ Tree.prototype.printBFS = function (node) {
   }
 }
 
+Tree.prototype.getDepth = function (node, i) {
+  if (!node) return i
+  i++
+  return Math.max(
+    this.getDepth(node.left, i),
+    this.getDepth(node.right, i)
+  )
+}
+
 module.exports = Tree
