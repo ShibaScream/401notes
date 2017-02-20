@@ -1,6 +1,6 @@
 const Node = require('./node')
 
-function Tree (array) {
+function BinarySearchTree (array) {
   this.root = null
   if (array && Array.isArray(array)) {
     array.forEach(value => {
@@ -10,7 +10,7 @@ function Tree (array) {
 }
 
 // search function for a full and balanced tree = log(n)
-Tree.prototype.search = function (node, value) {
+BinarySearchTree.prototype.search = function (node, value) {
   if (!node) return false
   if (node.value === value) return true
   if (node.value > value) {
@@ -20,7 +20,7 @@ Tree.prototype.search = function (node, value) {
   }
 }
 
-Tree.prototype.insertNode = function (value, node) {
+BinarySearchTree.prototype.insertNode = function (value, node) {
   if (!this.root) {
     console.log('created root!')
     node = new Node(value)
@@ -48,14 +48,14 @@ Tree.prototype.insertNode = function (value, node) {
 
 }
 
-Tree.prototype.printDFS = function (node) {
+BinarySearchTree.prototype.printDFS = function (node) {
   if (!node) return
   console.log(node.value)
   this.printDFS(node.left)
   this.printDFS(node.right)
 }
 
-Tree.prototype.printBFS = function (node) {
+BinarySearchTree.prototype.printBFS = function (node) {
   if (!node) return
   let queue = []
   queue.push(node)
@@ -67,7 +67,7 @@ Tree.prototype.printBFS = function (node) {
   }
 }
 
-Tree.prototype.getDepth = function (node, i) {
+BinarySearchTree.prototype.getDepth = function (node, i) {
   if (!node) return i
   i++
   return Math.max(
@@ -76,4 +76,51 @@ Tree.prototype.getDepth = function (node, i) {
   )
 }
 
-module.exports = Tree
+BinarySearchTree.prototype.sumNodes = function (node, result = {i:0, array:[] }) {
+  if (!node) return result
+  result.i += node.value
+  result.array.push(node.value)
+  let left = this.sumNodes(node.left, result)
+  let right = this.sumNodes(node.right, result)
+  return left.i > right.i ? left : right
+}
+
+function _reassignLeftNode (node) {
+  if (!node.right) {
+    node.right = node.left
+    return
+  }
+  let current = node
+  while (current.left) {
+    current = current.left
+  }
+  current.left = node.left
+}
+
+BinarySearchTree.prototype.deleteNode = function (value, node=this.root) {
+  if (!node) return false
+  if (node.value === value) {
+    _reassignLeftNode(node)
+    node = node.right
+    return true
+  }
+  if (node.value > value) {
+    if (node.left.value === value) {
+      _reassignLeftNode(node.left)
+      node.left = node.left.right
+      return true
+    }
+    this.deleteNode(node.left, value)
+  } else {
+    if (node.right.value === value) {
+      _reassignLeftNode(node.right)
+      node.right = node.right.right
+      return true
+    }
+    this.deleteNode(node.right, value)
+  }
+  return false
+}
+
+
+module.exports = BinarySearchTree
