@@ -10,8 +10,9 @@ function BinarySearchTree (array) {
 }
 
 // search function for a full and balanced tree = log(n)
-BinarySearchTree.prototype.search = function (node, value) {
+BinarySearchTree.prototype.search = function (value, node=this.root) {
   if (!node) return false
+  if (value == undefined || value == null) return false
   if (node.value === value) return true
   if (node.value > value) {
     this.search(node.left, value)
@@ -20,16 +21,12 @@ BinarySearchTree.prototype.search = function (node, value) {
   }
 }
 
-BinarySearchTree.prototype.insertNode = function (value, node) {
+BinarySearchTree.prototype.insertNode = function (value, node=this.root) {
+  if (value == undefined || value == null) throw new Error('no value given')
   if (!this.root) {
-    console.log('created root!')
     node = new Node(value)
     this.root = node
-    return this.root
-  }
-
-  if (!node) {
-    node = this.root
+    return
   }
 
   if (node.value > value) {
@@ -48,14 +45,14 @@ BinarySearchTree.prototype.insertNode = function (value, node) {
 
 }
 
-BinarySearchTree.prototype.printDFS = function (node) {
+BinarySearchTree.prototype.printDFS = function (node=this.root) {
   if (!node) return
   console.log(node.value)
   this.printDFS(node.left)
   this.printDFS(node.right)
 }
 
-BinarySearchTree.prototype.printBFS = function (node) {
+BinarySearchTree.prototype.printBFS = function (node=this.root) {
   if (!node) return
   let queue = []
   queue.push(node)
@@ -67,7 +64,7 @@ BinarySearchTree.prototype.printBFS = function (node) {
   }
 }
 
-BinarySearchTree.prototype.getDepth = function (node, i) {
+BinarySearchTree.prototype.getDepth = function (node=this.root, i=0) {
   if (!node) return i
   i++
   return Math.max(
@@ -76,7 +73,7 @@ BinarySearchTree.prototype.getDepth = function (node, i) {
   )
 }
 
-BinarySearchTree.prototype.sumNodes = function (node, result = {i:0, array:[] }) {
+BinarySearchTree.prototype.sumNodes = function (node=this.root, result = {i:0, array:[] }) {
   if (!node) return result
   result.i += node.value
   result.array.push(node.value)
@@ -85,22 +82,13 @@ BinarySearchTree.prototype.sumNodes = function (node, result = {i:0, array:[] })
   return left.i > right.i ? left : right
 }
 
-function _reassignLeftNode (node) {
-  if (!node.right) {
-    node.right = node.left
-    return
-  }
-  let current = node
-  while (current.left) {
-    current = current.left
-  }
-  current.left = node.left
-}
 
 BinarySearchTree.prototype.deleteNode = function (value, node=this.root) {
   if (!node) return false
+  if (value == undefined || value == null) return false
   if (node.value === value) {
     _reassignLeftNode(node)
+    console.log('ended reassign with', node)
     node = node.right
     return true
   }
@@ -122,5 +110,20 @@ BinarySearchTree.prototype.deleteNode = function (value, node=this.root) {
   return false
 }
 
+function _reassignLeftNode (node) {
+  console.log('Started reassign with:', node)
+  if (node.left == null) return
+  if (node.right == null) {
+    node.right = node.left
+    node.left = null
+    return
+  }
+  let current = node
+  while (current.left) {
+    current = current.left
+  }
+  current.left = node.left
+  node.left = null
+}
 
 module.exports = BinarySearchTree
