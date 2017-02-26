@@ -1,3 +1,5 @@
+'use strict'
+
 function mergeSort (array) {
   if (array.length <= 1) return array
   let midIndex = Math.floor(array.length / 2)

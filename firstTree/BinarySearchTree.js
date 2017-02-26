@@ -57,10 +57,10 @@ BinarySearchTree.prototype.printBFS = function (node=this.root) {
   let queue = []
   queue.push(node)
   while (queue.length) {
-    let current = queue.pop()
-    queue.push(current.left)
-    queue.push(current.right)
+    let current = queue.shift()
     console.log(current.value)
+    if (current.left) queue.push(current.left)
+    if (current.right) queue.push(current.right)
   }
 }
 
@@ -84,46 +84,47 @@ BinarySearchTree.prototype.sumNodes = function (node=this.root, result = {i:0, a
 
 
 BinarySearchTree.prototype.deleteNode = function (value, node=this.root) {
-  if (!node) return false
-  if (value == undefined || value == null) return false
-  if (node.value === value) {
-    _reassignLeftNode(node)
-    console.log('ended reassign with', node)
-    node = node.right
-    return true
+  if (value == undefined || value == null) throw new Error('no value given')
+  if (node == undefined || node == null) return node
+  else if (value < node.value) {
+    node.left = this.deleteNode(value, node.left)
   }
-  if (node.value > value) {
-    if (node.left.value === value) {
-      _reassignLeftNode(node.left)
-      node.left = node.left.right
-      return true
-    }
-    this.deleteNode(node.left, value)
-  } else {
-    if (node.right.value === value) {
-      _reassignLeftNode(node.right)
-      node.right = node.right.right
-      return true
-    }
-    this.deleteNode(node.right, value)
+  else if (value > node.value) {
+    node.right = this.deleteNode(value, node.right)
   }
-  return false
+  // we found the value
+  else {
+    // case 1
+    if (!node.left && !node.right) {
+      if (node === this.root) return this.root = null
+      node = null
+    }
+    // case 2
+    else if (!node.left) {
+      if (node === this.root) return this.root = node.right
+      node = node.right
+    }
+    else if (!node.right) {
+      if (node === this.root) return this.root = node.left
+      node = node.left
+    }
+    // case 3
+    else {
+      let minNode = _findMinVal(node.right)
+      node.value = minNode.value
+      node.right = this.deleteNode(node.value, node.right)
+    }
+  }
+  return node
 }
 
-function _reassignLeftNode (node) {
-  console.log('Started reassign with:', node)
-  if (node.left == null) return
-  if (node.right == null) {
-    node.right = node.left
-    node.left = null
-    return
+function _findMinVal (node) {
+  let currentNode = node
+  let minValNode = currentNode
+  while (currentNode.left) {
+    currentNode = currentNode.left
+    minValNode = minValNode.value > currentNode.value ? currentNode : minValNode
   }
-  let current = node
-  while (current.left) {
-    current = current.left
-  }
-  current.left = node.left
-  node.left = null
+  return minValNode
 }
-
 module.exports = BinarySearchTree
